@@ -2,7 +2,7 @@
 
 namespace GarageScene
 {
-	public class CDetailGrid : MonoBehaviour
+	public class CDetailsGridView : MonoBehaviour
 	{
 	}
 }

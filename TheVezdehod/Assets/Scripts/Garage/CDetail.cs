@@ -1,22 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace GarageScene
 {
-	public class CDetail : MonoBehaviour
+	[CreateAssetMenu(menuName = "Detail")]
+	public class CDetail : ScriptableObject
 	{
+		public string m_name;
+		public Image m_icon;
+		public DetailType m_type;
 
-		// Use this for initialization
-		void Start()
-		{
+		public int width;
+		public int height;
 
-		}
+		public float m_mass;
+		public float m_fuelPerSec;
+		public float m_speed;
+	}
 
-		// Update is called once per frame
-		void Update()
-		{
-
-		}
+	public enum DetailType
+	{
+		BLOCK,
+		ENGINE,
+		WHEELS,
+		FUEL_BANK,
+		ARTIFACT
 	}
 }

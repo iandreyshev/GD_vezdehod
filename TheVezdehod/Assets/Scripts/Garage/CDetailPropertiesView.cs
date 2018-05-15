@@ -2,7 +2,7 @@
 
 namespace GarageScene
 {
-	public class CDetailProperties : MonoBehaviour
+	public class CDetailPropertiesView : MonoBehaviour
 	{
 		void Start()
 		{
