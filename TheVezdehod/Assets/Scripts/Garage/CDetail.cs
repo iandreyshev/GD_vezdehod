@@ -6,24 +6,25 @@ namespace GarageScene
 	[CreateAssetMenu(menuName = "Detail")]
 	public class CDetail : ScriptableObject
 	{
-		public string m_name;
-		public Sprite m_icon;
-		public DetailType m_type;
+		public string title;
+		public Sprite sprite;
+		public DetailType type = DetailType.BLOCK;
 
-		public int width;
-		public int height;
+		public int width = 1;
+		public int height = 1;
 
-		public float m_mass;
-		public float m_speed;
-		public float m_fuelCapasity;
-		public float m_fuelPerSec;
+		public float mass;
+		public float speed;
+		public float fuelCapasity;
+		public float fuelPerSec;
 	}
 
 	public enum DetailType
 	{
+		SKELETON,
 		BLOCK,
 		ENGINE,
-		WHEELS,
+		WHEEL,
 		FUEL_BANK,
 		ARTIFACT
 	}

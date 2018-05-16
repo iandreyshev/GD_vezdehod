@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 114767585955670720}
   - component: {fileID: 222415188061023086}
   - component: {fileID: 114673576676688798}
+  - component: {fileID: 114251048399720924}
   m_Layer: 0
   m_Name: DetailView
   m_TagString: Untagged
@@ -41,8 +42,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefa8f6d0036ead4c85af163a7ed111d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detail: {fileID: 11400000, guid: 4d6a03f5beff77f44aba3b0f80c805e1, type: 2}
-  image: {fileID: 114673576676688798}
+  detail: {fileID: 0}
+--- !u!114 &114251048399720924
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1922210420004280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1254083943, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AspectMode: 2
+  m_AspectRatio: 1
 --- !u!114 &114673576676688798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -109,8 +122,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: OnDetailClick
+      - m_Target: {fileID: 114242872678710124}
+        m_MethodName: 
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 4d6a03f5beff77f44aba3b0f80c805e1,
@@ -136,14 +149,14 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1922210420004280}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.875}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: -1233.7, y: 0}
+  m_Pivot: {x: 0, y: 1}
