@@ -7,7 +7,7 @@ namespace GarageScene
 	public class CDetail : ScriptableObject
 	{
 		public string m_name;
-		public Image m_icon;
+		public Sprite m_icon;
 		public DetailType m_type;
 
 		public int width;
