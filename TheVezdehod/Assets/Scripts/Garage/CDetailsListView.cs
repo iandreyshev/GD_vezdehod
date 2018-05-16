@@ -6,6 +6,6 @@ namespace GarageScene
 	public class CDetailsListView : MonoBehaviour
 	{
 		[SerializeField]
-		private List<CDetail> m_details;
+		private List<CDetailView> m_detailsViews;
 	}
 }
