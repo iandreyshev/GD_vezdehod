@@ -14,9 +14,9 @@ namespace GarageScene
 		public int height;
 
 		public float m_mass;
-		public float m_fuelPerSec;
-		public float m_fuelCapasity;
 		public float m_speed;
+		public float m_fuelCapasity;
+		public float m_fuelPerSec;
 	}
 
 	public enum DetailType

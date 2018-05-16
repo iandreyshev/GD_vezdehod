@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-public class CSceneController : MonoBehaviour {
-
+public class CSceneController : MonoBehaviour
+{
 	// Use this for initialization
 	void Start () {
 		
