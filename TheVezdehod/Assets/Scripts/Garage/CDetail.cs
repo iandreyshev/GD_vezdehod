@@ -15,6 +15,7 @@ namespace GarageScene
 
 		public float m_mass;
 		public float m_fuelPerSec;
+		public float m_fuelCapasity;
 		public float m_speed;
 	}
 

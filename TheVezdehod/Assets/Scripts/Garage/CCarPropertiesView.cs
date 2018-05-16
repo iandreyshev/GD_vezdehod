@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace GarageScene
 {
-	public class CCarStats : MonoBehaviour
+	public class CCarPropertiesView : MonoBehaviour
 	{
 		public void Set(List<CDetail> carDetails)
 		{
@@ -11,3 +11,4 @@ namespace GarageScene
 		}
 	}
 }
+	
