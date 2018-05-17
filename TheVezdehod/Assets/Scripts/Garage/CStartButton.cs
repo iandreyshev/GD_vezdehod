@@ -5,7 +5,7 @@ namespace GarageScene
 {
 	public class CStartButton : MonoBehaviour
 	{
-		public CGridModel GridModel { get; set; };
+		public CGridModel GridModel { get; set; }
 
 		private void Awake()
 		{
@@ -16,9 +16,12 @@ namespace GarageScene
 		{
 			var car = new CCar();
 
-			m_grid.
+			foreach (GridItem item in GridModel.GetInstalledItems())
+			{
+				car.Insert(item.detail, (int)item.col, (int)item.row);
+			}
 
-			CDataManager.Serialize();
+			CDataManager.Serialize(car);
 		}
 	}
 }
