@@ -48,52 +48,10 @@ namespace GarageScene
 		private Skeleton m_skeleton = Skeleton.Lenovo; // lenovo by default
 
 		private List<GridItem> m_insertedItems = new List<GridItem>();
-		private Dictionary<Skeleton, List<BlockItem>> m_availableBlocks = new Dictionary<Skeleton, List<BlockItem>> {
-				{ Skeleton.Lenovo, new List<BlockItem>() },
-				{ Skeleton.Goliath, new List<BlockItem>() }
-		};
 
 		void Start()
 		{
-			// Леново средних размеров, может быть установлено только два колеса и и один топливный бак
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(2, 0, DetailType.BLOCK));
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(2, 5, DetailType.BLOCK));
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(1, 1, DetailType.BLOCK));
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(1, 4, DetailType.BLOCK));
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(3, 1, DetailType.WHEEL));
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(3, 4, DetailType.WHEEL));
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(2, 0, DetailType.ARTIFACT));
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(2, 5, DetailType.ARTIFACT));
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(1, 1, DetailType.ENGINE));
-			m_availableBlocks[Skeleton.Lenovo].Add(new BlockItem(1, 2, DetailType.FUEL_BANK));
-
-			// Голиаф мощный и тяжелый, может быть установлено до 6 колёс и до 5 топливных баков
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(3, 0, DetailType.WHEEL));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(3, 1, DetailType.WHEEL));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(3, 2, DetailType.WHEEL));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(3, 3, DetailType.WHEEL));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(3, 4, DetailType.WHEEL));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(3, 5, DetailType.WHEEL));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(1, 0, DetailType.ENGINE));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(1, 1, DetailType.FUEL_BANK));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(1, 2, DetailType.FUEL_BANK));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(1, 3, DetailType.FUEL_BANK));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(1, 4, DetailType.FUEL_BANK));
-			m_availableBlocks[Skeleton.Goliath].Add(new BlockItem(1, 5, DetailType.FUEL_BANK));
-
 			SetSkeleton(m_skeleton);
-		}
-
-		private bool IsTypeAvailableAtPosition(DetailType type, uint row, uint col)
-		{
-			foreach (BlockItem item in m_availableBlocks[m_skeleton])
-			{
-				if (item.row == row && item.col == col && type == item.type)
-				{
-					return true;
-				}
-			}
-			return false;
 		}
 
 		public bool PossibleToInsertAt(CDetail detail, uint row, uint col)
@@ -172,6 +130,18 @@ namespace GarageScene
 			});
 		}
 
+		public List<CDetail> GetInstalledDetails()
+		{
+			var result = new List<CDetail>();
+
+			foreach (GridItem item in m_insertedItems)
+			{
+				result.Add(item.detail);
+			}
+
+			return result;
+		}
+
 		public List<GridItem> GetInstalledItems()
 		{
 			return m_insertedItems;
@@ -180,10 +150,10 @@ namespace GarageScene
 		public void SetDetailAt(CDetail detail, uint row, uint col)
 		{
 			// Лучше проверять assert'ом в Debug моде, ибо подразумевается использование if'а перед вызовом метода
-			if (!PossibleToInsertAt(detail, row, col))
-			{
-				throw new Exception("it's not possible to set that detail");
-			}
+			// if (!PossibleToInsertAt(detail, row, col))
+			// {
+			// throw new Exception("it's not possible to set that detail");
+			// }
 			m_insertedItems.Add(new GridItem(row, col, detail));
 		}
 

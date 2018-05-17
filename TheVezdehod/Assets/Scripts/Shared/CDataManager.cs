@@ -17,13 +17,13 @@ public class CDataManager
 
 	public static CCar Deserialize()
 	{
-		CCar level = null;
+		CCar car = null;
 		BinaryFormatter bFormatter = new BinaryFormatter();
 		FileStream stream = new FileStream(PATH, FileMode.Open);
 
-		level = bFormatter.Deserialize(stream) as CCar;
+		car = bFormatter.Deserialize(stream) as CCar;
 		stream.Close();
 
-		return level;
+		return car;
 	}
 }

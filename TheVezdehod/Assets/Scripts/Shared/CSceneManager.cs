@@ -1,14 +1,19 @@
-﻿using UnityEngine;
+﻿using UnityEngine.SceneManagement;
 
-public class CSceneController : MonoBehaviour
+public class CSceneController
 {
-	// Use this for initialization
-	void Start () {
-		
+	public static void Menu()
+	{
+		SceneManager.LoadScene("Scenes/MenuScene");
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public static void Garage()
+	{
+		SceneManager.LoadScene("Scenes/GarageScene");
+	}
+
+	public static void Road()
+	{
+		SceneManager.LoadScene("Scenes/RoadScene");
 	}
 }

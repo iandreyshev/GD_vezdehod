@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace GarageScene
 {
@@ -14,11 +15,15 @@ namespace GarageScene
 		[SerializeField]
 		private CDetailPropertiesView m_detailProperties;
 		[SerializeField]
+		private CCarPropertiesView m_carPropertiesView;
+
+		[SerializeField]
 		private CStartButton m_startButton;
 
 		private OnDetailClickListener m_onClickListener;
 		private CGridModel m_gridModel;
 		private CDetail m_selectedDetail;
+		private List<CDetailView> m_detailsViews = new List<CDetailView>();
 
 		private void Start()
 		{
@@ -29,19 +34,23 @@ namespace GarageScene
 
 			foreach (CDetail detail in m_details)
 			{
-				var detailView = Instantiate(m_detailViewProto, transform);
-				detailView.onClickListener = m_onClickListener;
-				detailView.detail = detail;
+				var view = Instantiate(m_detailViewProto, transform);
+				view.onClickListener = m_onClickListener;
+				view.detail = detail;
 
-				var viewRectTransform = detailView.GetComponent<RectTransform>();
+				var viewRectTransform = view.GetComponent<RectTransform>();
 				viewRectTransform.Translate(new Vector3(offset, 0, 0));
 
 				offset += viewRectTransform.rect.height;
+
+				m_detailsViews.Add(view);
 			}
 
 			m_gridModel = new CGridModel();
 			m_gridView.InitSize(m_gridModel.GetColumnsCount(), m_gridModel.GetRowsCount());
 			m_gridView.onTileClick = new OnTileClickListener(this);
+
+			m_startButton.GridModel = m_gridModel;
 		}
 
 		private class OnDetailClickListener : IOnDetailClickListener
@@ -56,14 +65,15 @@ namespace GarageScene
 			public void OnClick(CDetail detail)
 			{
 				m_view.m_selectedDetail = detail;
-				var positions = m_view.m_gridModel.GetAvailablePositionsForDetail(detail);
+
+				var positions = m_view.m_gridModel.GetAvailablePositionsForDetail(m_view.m_selectedDetail);
 				
 				foreach (Vector2Int vect in positions)
 				{
 					m_view.m_gridView.OpenAt(vect.x, vect.y);
 				}
 
-				m_view.m_detailProperties.Set(detail);
+				m_view.m_detailProperties.Set(m_view.m_selectedDetail);
 			}
 		}
 
@@ -81,6 +91,17 @@ namespace GarageScene
 				m_view.m_gridView.DrawAt(m_view.m_selectedDetail, x, y);
 				m_view.m_gridView.CloseAll();
 				m_view.m_detailProperties.Close();
+
+				m_view.m_gridModel.SetDetailAt(m_view.m_selectedDetail, (uint)x, (uint)y);
+				m_view.m_carPropertiesView.Set(m_view.m_gridModel.GetInstalledDetails());
+
+				m_view.m_detailsViews.ForEach((e) =>
+				{
+					if (e.detail == m_view.m_selectedDetail)
+					{
+						e.GetComponent<Button>().interactable = false;
+					}
+				});
 			}
 		}
 	}

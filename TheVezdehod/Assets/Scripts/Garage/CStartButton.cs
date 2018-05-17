@@ -18,10 +18,12 @@ namespace GarageScene
 
 			foreach (GridItem item in GridModel.GetInstalledItems())
 			{
-				car.Insert(item.detail, (int)item.col, (int)item.row);
+				car.Insert(item.detail.ToDataType(), (int)item.col, (int)item.row);
 			}
 
 			CDataManager.Serialize(car);
+
+			CSceneController.Road();
 		}
 	}
 }

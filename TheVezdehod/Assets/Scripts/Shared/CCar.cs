@@ -17,10 +17,10 @@ public class CVect
 [System.Serializable]
 public class CCar
 {
-	public List<CDetail> details = new List<CDetail>();
+	public List<DetailData> details = new List<DetailData>();
 	public List<CVect> addreses = new List<CVect>();
 
-	public void Insert(CDetail detail, int x, int y)
+	public void Insert(DetailData detail, int x, int y)
 	{
 		details.Add(detail);
 		addreses.Add(new CVect(x, y));

@@ -65,13 +65,17 @@
     <Compile Include="Assets\Scripts\Garage\CDetailsGridView.cs" />
     <Compile Include="Assets\Scripts\Garage\CDetailsListView.cs" />
     <Compile Include="Assets\Scripts\Garage\CDetailView.cs" />
+    <Compile Include="Assets\Scripts\Garage\CGarageSceneController.cs" />
     <Compile Include="Assets\Scripts\Garage\CGridModel.cs" />
     <Compile Include="Assets\Scripts\Garage\CPropertyBar.cs" />
     <Compile Include="Assets\Scripts\Garage\CStartButton.cs" />
     <Compile Include="Assets\Scripts\Garage\CTile.cs" />
+    <Compile Include="Assets\Scripts\Road\CRoadSceneController.cs" />
+    <Compile Include="Assets\Scripts\Road\CVezdehod.cs" />
     <Compile Include="Assets\Scripts\Shared\CCar.cs" />
     <Compile Include="Assets\Scripts\Shared\CDataManager.cs" />
     <Compile Include="Assets\Scripts\Shared\CSceneManager.cs" />
+    <None Include="Assets\Resources\Cars\car.txt" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>D:/Programs/Volgatech/GD/GD_vezdehod/TheVezdehod/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
