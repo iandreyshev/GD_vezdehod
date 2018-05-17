@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 namespace GarageScene
 {
+	[System.Serializable]
 	[CreateAssetMenu(menuName = "Detail")]
 	public class CDetail : ScriptableObject
 	{
@@ -15,8 +15,8 @@ namespace GarageScene
 
 		public float mass;
 		public float speed;
-		public float fuelCapasity;
-		public float fuelPerSec;
+		public float fuelCap;
+		public float fuelCons;
 	}
 
 	public enum DetailType

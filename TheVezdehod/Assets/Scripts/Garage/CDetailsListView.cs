@@ -11,6 +11,10 @@ namespace GarageScene
 		private CDetailView m_detailViewProto;
 		[SerializeField]
 		private CDetailsGridView m_gridView;
+		[SerializeField]
+		private CDetailPropertiesView m_detailProperties;
+		[SerializeField]
+		private CStartButton m_startButton;
 
 		private OnDetailClickListener m_onClickListener;
 		private CGridModel m_gridModel;
@@ -58,6 +62,8 @@ namespace GarageScene
 				{
 					m_view.m_gridView.OpenAt(vect.x, vect.y);
 				}
+
+				m_view.m_detailProperties.Set(detail);
 			}
 		}
 
@@ -74,6 +80,7 @@ namespace GarageScene
 			{
 				m_view.m_gridView.DrawAt(m_view.m_selectedDetail, x, y);
 				m_view.m_gridView.CloseAll();
+				m_view.m_detailProperties.Close();
 			}
 		}
 	}

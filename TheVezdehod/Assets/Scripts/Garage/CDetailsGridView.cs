@@ -21,7 +21,6 @@ namespace GarageScene
 		public void InitSize(uint width, uint height)
 		{
 			m_detailSize = GetComponent<GridLayoutGroup>().cellSize.x;
-			Debug.Log(m_detailSize);
 			m_width = (int)width;
 			m_height = (int)height;
 
