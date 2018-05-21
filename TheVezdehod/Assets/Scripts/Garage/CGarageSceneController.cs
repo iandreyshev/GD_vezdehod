@@ -1,18 +1,22 @@
-﻿using UnityEngine;
+﻿using Shared;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class CGarageSceneController : MonoBehaviour
+namespace GarageScene
 {
-	[SerializeField]
-	private Button m_backButton;
-
-	private void Awake()
+	public class CGarageSceneController : MonoBehaviour
 	{
-		m_backButton.onClick.AddListener(OnBackButtonClick);
-	}
+		[SerializeField]
+		private Button m_backButton;
 
-	private void OnBackButtonClick()
-	{
-		CSceneController.Menu();
+		private void Awake()
+		{
+			m_backButton.onClick.AddListener(OnBackButtonClick);
+		}
+
+		private void OnBackButtonClick()
+		{
+			CSceneSwitcher.Menu();
+		}
 	}
 }

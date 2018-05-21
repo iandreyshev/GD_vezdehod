@@ -15,8 +15,8 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 1e8a6b8cbca53e94f8ce463967290722, type: 3}
   type: 3
   width: 2
-  height: 3
+  height: 2
   mass: 3
   speed: 6
-  fuelCap: 200
+  fuelCap: 10
   fuelCons: 17

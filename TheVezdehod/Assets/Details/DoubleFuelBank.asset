@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Name: DoubleFuelBank
   m_EditorClassIdentifier: 
   title: 
-  sprite: {fileID: 21300000, guid: 040a90fda7417894e8cdd13627a7c689, type: 3}
+  sprite: {fileID: 21300000, guid: de86b5d2b3c03c94e88a8d39848ab8e7, type: 3}
   type: 4
   width: 2
   height: 1
-  mass: 0
-  speed: 0
-  fuelCap: 0
-  fuelCons: 0
+  mass: 7
+  speed: 5
+  fuelCap: 8
+  fuelCons: 4

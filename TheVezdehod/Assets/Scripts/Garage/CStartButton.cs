@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Shared;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace GarageScene
@@ -22,8 +23,7 @@ namespace GarageScene
 			}
 
 			CDataManager.Serialize(car);
-
-			CSceneController.Road();
+			CSceneSwitcher.Road();
 		}
 	}
 }

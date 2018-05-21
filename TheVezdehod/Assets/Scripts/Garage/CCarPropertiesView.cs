@@ -10,9 +10,7 @@ namespace GarageScene
 		[SerializeField]
 		private CPropertyBar m_speed;
 		[SerializeField]
-		private CPropertyBar m_fuelCap;
-		[SerializeField]
-		private CPropertyBar m_fuelCons;
+		private CPropertyBar m_nitro;
 
 		[SerializeField]
 		private float m_max = 100;
@@ -34,16 +32,14 @@ namespace GarageScene
 
 			m_mass.Value = mass;
 			m_speed.Value = speed;
-			m_fuelCap.Value = fuelCap;
-			m_fuelCons.Value = fuelCons;
+			m_nitro.Value = fuelCap;
 		}
 
 		private void Awake()
 		{
 			m_mass.Max = m_max;
 			m_speed.Max = m_max;
-			m_fuelCap.Max = m_max;
-			m_fuelCons.Max = m_max;
+			m_nitro.Max = m_max;
 		}
 	}
 }
