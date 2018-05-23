@@ -42,7 +42,7 @@ namespace Shared
 			stream.Close();
 		}
 
-		public static CCar Deserialize()
+		public static CCar DeserializeCar()
 		{
 			CCar car = null;
 			BinaryFormatter bFormatter = new BinaryFormatter();

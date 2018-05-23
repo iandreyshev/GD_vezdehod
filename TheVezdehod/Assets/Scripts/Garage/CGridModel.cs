@@ -5,111 +5,177 @@ using UnityEngine;
 
 namespace GarageScene
 {
-	public enum Skeleton
+	public enum SkeletonType
 	{
+		None,
 		Lenovo,
 		Goliath
 	}
 
+	public enum CanBeInsertedInfo
+	{
+		YesNoProblem,
+		ToMuchWheels,
+		ToMuchEngines,
+		InvalidPosition
+	}
+
 	public class GridItem
 	{
-		public GridItem(uint row, uint col, CDetail detail)
+		public GridItem(int x, int y, DetailData detail)
 		{
-			this.row = row;
-			this.col = col;
+			this.x = x;
+			this.y = y;
 			this.detail = detail;
 		}
 
-		public uint row;
-		public uint col;
-		public CDetail detail;
+		public int x;
+		public int y;
+		public DetailData detail;
 	}
 
-	public class BlockItem
+	public class CGridModel
 	{
-		public BlockItem(uint row, uint col, DetailType type)
+		public int Width { get; private set; }
+		public int Height { get; private set; }
+
+		private List<GridItem> m_details = new List<GridItem>();
+		private SkeletonType m_skeleton = SkeletonType.None;
+		private int m_wheelsCount = 0;
+
+		private IDictionary<DetailType, int> m_counts = new Dictionary<DetailType, int>()
 		{
-			this.row = row;
-			this.col = col;
-			this.type = type;
+			{ DetailType.Artifact, 0 },
+			{ DetailType.Block, 0 },
+			{ DetailType.Engine, 0 },
+			{ DetailType.FuelBank, 0 },
+			{ DetailType.Wheel, 0 }
+		};
+
+		public CGridModel()
+		{
+			Width = 9;
+			Height = 5;
 		}
 
-		public uint row;
-		public uint col;
-		public DetailType type;
-	}
-
-	public class CGridModel : MonoBehaviour
-	{
-		private uint m_cols = 9;
-		private uint m_rows = 5;
-
-		[SerializeField]
-		private Skeleton m_skeleton = Skeleton.Lenovo; // lenovo by default
-
-		private List<GridItem> m_insertedItems = new List<GridItem>();
-
-		void Start()
+		public void SetSkeleton(SkeletonType skeleton, DetailData prototype)
 		{
-			SetSkeleton(m_skeleton);
-		}
-
-		public bool PossibleToInsertAt(CDetail detail, uint row, uint col)
-		{
-			if (row >= m_rows || col >= m_cols)
+			Clear();
+			var points = GetSkeletonPoints(skeleton);
+			foreach (var point in points)
 			{
-				return false;
+				InsertDetail(point.x, point.y, prototype);
 			}
-
-			foreach (GridItem item in m_insertedItems)
-			{
-				if (row >= item.row && row <= item.row + item.detail.height &&
-					col >= item.col && col <= item.col + item.detail.width)
-				{
-					return false;
-				}
-			}
-
-			return true;//IsTypeAvailableAtPosition(detail.type, row, col);
+			m_skeleton = skeleton;
 		}
 
-		public List<Vector2Int> GetAvailablePositionsForDetail(CDetail detail)
+		public SkeletonType GetSkeletonType()
+		{
+			return m_skeleton;
+		}
+
+		public void InsertDetail(int x, int y, DetailData detail)
+		{
+			m_details.Add(new GridItem(x, y, detail));
+			UpdateDetailsCount();
+		}
+
+		public List<GridItem> GetInstalledBlocks()
+		{
+			return m_details;
+		}
+
+		public List<Vector2Int> GetAvailablePositionsForInsertion(DetailData detail)
 		{
 			List<Vector2Int> positions = new List<Vector2Int>();
-			for (uint row = 0; row < m_rows; ++row)
+			for (int i = 0; i < Height; ++i)
 			{
-				for (uint col = 0; col < m_cols; ++col)
+				for (int j = 0; j < Width; ++j)
 				{
-					if (PossibleToInsertAt(detail, row, col))
+					if (CanBeInserted(j, i, detail) == CanBeInsertedInfo.YesNoProblem)
 					{
-						positions.Add(new Vector2Int((int)col, (int)row));
+						positions.Add(new Vector2Int(j, i));
 					}
 				}
 			}
 			return positions;
 		}
 
-		public bool CanBeDeletedAt(uint row, uint col)
+		public CanBeInsertedInfo CanBeInserted(int x, int y, DetailData detail)
 		{
-			// Нельзя удалить блок из каркаса
-			if (m_skeleton == Skeleton.Lenovo)
+			// Если колес уже два нельзя вставить больше
+			if (detail.type == DetailType.Wheel && m_counts[DetailType.Wheel] >= 2)
 			{
-				if (row == 2 && col == 1)
+				return CanBeInsertedInfo.ToMuchWheels;
+			}
+
+			// Двигатель только один
+			if (detail.type == DetailType.Engine && m_counts[DetailType.Engine] >= 1)
+			{
+				return CanBeInsertedInfo.ToMuchEngines;
+			}
+
+			foreach (var inserted in m_details)
+			{
+				if (x == inserted.x + 1 && y == inserted.y && x > 0 && x < Width ||
+					x == inserted.x - 1 && y == inserted.y && x > 0 && x < Width ||
+					y == inserted.y - 1 && x == inserted.x && y > 0 && y < Height ||
+					y == inserted.y + 1 && x == inserted.x && y > 0 && y < Height)
 				{
-					return false;
+					return inserted.detail.type == DetailType.Block ?
+						CanBeInsertedInfo.YesNoProblem : CanBeInsertedInfo.InvalidPosition;
 				}
 			}
-			if (m_skeleton == Skeleton.Goliath)
+			return CanBeInsertedInfo.InvalidPosition;
+		}
+
+		public void DeleteDetail(int x, int y)
+		{
+			m_details.RemoveAll((GridItem item) =>
 			{
-				if (row == 1 && col == 0 || row == 2 && col == 0)
+				return item.x == x && item.y == y;
+			});
+			UpdateDetailsCount();
+		}
+
+		public void Clear()
+		{
+			m_details.Clear();
+			m_skeleton = SkeletonType.None;
+			UpdateDetailsCount();
+		}
+
+		void UpdateDetailsCount()
+		{
+			m_counts = new Dictionary<DetailType, int>()
+			{
+				{ DetailType.Artifact, 0 },
+				{ DetailType.Block, 0 },
+				{ DetailType.Engine, 0 },
+				{ DetailType.FuelBank, 0 },
+				{ DetailType.Wheel, 0 }
+			};
+			foreach (var item in m_details)
+			{
+				++m_counts[item.detail.type];
+			}
+		}
+
+		public bool CanBeDeleted(int x, int y)
+		{
+			var points = GetSkeletonPoints(m_skeleton);
+
+			foreach (var point in points)
+			{
+				if (point.x == x && point.y == y)
 				{
 					return false;
 				}
 			}
 
-			foreach (var item in m_insertedItems)
+			foreach (var detail in m_details)
 			{
-				if (item.row == row && item.col == col)
+				if (detail.x == x && detail.y == y)
 				{
 					return true;
 				}
@@ -118,50 +184,11 @@ namespace GarageScene
 			return false;
 		}
 
-		public void DeleteDetail(uint row, uint col)
+		public DetailData GetDetail(int x, int y)
 		{
-			if (!CanBeDeletedAt(row, col))
+			foreach (var item in m_details)
 			{
-				throw new Exception("detail can't be deleted");
-			}
-			m_insertedItems.RemoveAll((GridItem item) =>
-			{
-				return item.col == col && item.row == row;
-			});
-		}
-
-		public List<CDetail> GetInstalledDetails()
-		{
-			var result = new List<CDetail>();
-
-			foreach (GridItem item in m_insertedItems)
-			{
-				result.Add(item.detail);
-			}
-
-			return result;
-		}
-
-		public List<GridItem> GetInstalledItems()
-		{
-			return m_insertedItems;
-		}
-
-		public void SetDetailAt(CDetail detail, uint row, uint col)
-		{
-			// Лучше проверять assert'ом в Debug моде, ибо подразумевается использование if'а перед вызовом метода
-			// if (!PossibleToInsertAt(detail, row, col))
-			// {
-			// throw new Exception("it's not possible to set that detail");
-			// }
-			m_insertedItems.Add(new GridItem(row, col, detail));
-		}
-
-		public CDetail GetDetailAt(uint row, uint col)
-		{
-			foreach (var item in m_insertedItems)
-			{
-				if (item.col == col && item.row == row)
+				if (item.x == x && item.y == y)
 				{
 					return item.detail;
 				}
@@ -169,50 +196,50 @@ namespace GarageScene
 			return null;
 		}
 
-		private CDetail CreateSkeletonDetailBlock(int width, int height, int mass)
+		public List<Vector2Int> GetSkeletonPoints(SkeletonType skeleton)
 		{
-			CDetail detail = new CDetail
+			switch (skeleton)
 			{
-				width = width,
-				height = height,
-				mass = mass
-			};
-			return detail;
-		}
-
-		public void SetSkeleton(Skeleton skeleton)
-		{
-			Clear();
-			m_skeleton = skeleton;
-			if (m_skeleton == Skeleton.Lenovo)
-			{
-				SetDetailAt(CreateSkeletonDetailBlock(4, 1, 100), 2, 1);
+				case SkeletonType.Lenovo:
+					return new List<Vector2Int>()
+				{
+					new Vector2Int(1, 3),
+					new Vector2Int(1, 2),
+					new Vector2Int(1, 1),
+					new Vector2Int(2, 1),
+					new Vector2Int(3, 1),
+					new Vector2Int(4, 1),
+					new Vector2Int(5, 1),
+					new Vector2Int(6, 1),
+					new Vector2Int(7, 2),
+					new Vector2Int(7, 3)
+				};
+				case SkeletonType.Goliath:
+					return new List<Vector2Int>()
+				{
+					new Vector2Int(0, 2),
+					new Vector2Int(1, 2),
+					new Vector2Int(2, 2),
+					new Vector2Int(3, 2),
+					new Vector2Int(4, 2),
+					new Vector2Int(5, 2),
+					new Vector2Int(6, 2),
+					new Vector2Int(7, 2),
+					new Vector2Int(8, 2),
+					new Vector2Int(0, 3),
+					new Vector2Int(1, 3),
+					new Vector2Int(2, 3),
+					new Vector2Int(3, 3),
+					new Vector2Int(4, 3),
+					new Vector2Int(5, 3),
+					new Vector2Int(6, 3),
+					new Vector2Int(7, 3),
+					new Vector2Int(8, 3)
+				};
+				case SkeletonType.None:
+					return new List<Vector2Int>();
 			}
-			else if (m_skeleton == Skeleton.Goliath)
-			{
-				SetDetailAt(CreateSkeletonDetailBlock(6, 1, 250), 1, 0);
-				SetDetailAt(CreateSkeletonDetailBlock(6, 1, 250), 2, 0);
-			}
-		}
-
-		public Skeleton GetSkeleton()
-		{
-			return m_skeleton;
-		}
-
-		public void Clear()
-		{
-			m_insertedItems.Clear();
-		}
-
-		public uint GetRowsCount()
-		{
-			return m_rows;
-		}
-
-		public uint GetColumnsCount()
-		{
-			return m_cols;
+			throw new Exception("FATAL ERROR");
 		}
 	}
 }

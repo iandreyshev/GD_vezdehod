@@ -15,14 +15,14 @@ namespace GarageScene
 
 		private int m_width;
 		private int m_height;
-		private float m_detailSize;
+		private Vector2 m_detailSize;
 		private CTile[,] m_tiles;
 
-		public void InitSize(uint width, uint height)
+		public void InitSize(int width, int height)
 		{
-			m_detailSize = GetComponent<GridLayoutGroup>().cellSize.x;
-			m_width = (int)width;
-			m_height = (int)height;
+			m_detailSize = GetComponent<GridLayoutGroup>().cellSize;
+			m_width = width;
+			m_height = height;
 
 			m_tiles = new CTile[m_width, m_height];
 
@@ -69,8 +69,7 @@ namespace GarageScene
 			var tile = m_tiles[x, y].transform;
 
 			var detailImage = Instantiate(m_imageProto, tile.position, Quaternion.identity, m_detailParent);
-			detailImage.GetComponent<RectTransform>().sizeDelta =
-				new Vector2(m_detailSize * detail.width, m_detailSize * detail.height);
+			detailImage.GetComponent<RectTransform>().sizeDelta = m_detailSize;
 			detailImage.sprite = detail.sprite;
 		}
 

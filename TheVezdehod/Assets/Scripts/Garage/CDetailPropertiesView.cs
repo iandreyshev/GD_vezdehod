@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace GarageScene
@@ -16,14 +17,14 @@ namespace GarageScene
 		[SerializeField]
 		private CPropertyBar m_nitro;
 		[SerializeField]
-		private GameObject m_notSelectedWrap;
+		private List<GameObject> m_visibleItems;
 
 		[SerializeField]
 		private float m_max = 20;
 
 		public void Set(CDetail detail)
 		{
-			m_notSelectedWrap.SetActive(false);
+			m_visibleItems.ForEach(e => { e.SetActive(true); });
 			m_title.text = detail.title;
 			m_icon.sprite = detail.sprite;
 			m_mass.Value = detail.mass;
@@ -33,7 +34,7 @@ namespace GarageScene
 
 		public void Close()
 		{
-			m_notSelectedWrap.SetActive(true);
+			m_visibleItems.ForEach(e => { e.SetActive(false); });
 		}
 
 		private void Awake()

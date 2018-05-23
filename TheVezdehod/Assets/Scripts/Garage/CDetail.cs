@@ -4,13 +4,11 @@ using UnityEngine;
 namespace GarageScene
 {
 	[System.Serializable]
-	public struct DetailData
+	public class DetailData
 	{
 		public string title;
 		public string spritePath;
 		public DetailType type;
-		public int width;
-		public int height;
 		public float mass;
 		public float speed;
 		public float fuelCap;
@@ -22,15 +20,29 @@ namespace GarageScene
 	{
 		public string title;
 		public Sprite sprite;
-		public DetailType type = DetailType.BLOCK;
-
-		public int width = 1;
-		public int height = 1;
+		public DetailType type = DetailType.Block;
 
 		public float mass;
 		public float speed;
 		public float fuelCap;
 		public float fuelCons;
+
+		public DetailData Data
+		{
+			get
+			{
+				return new DetailData
+				{
+					title = title,
+					spritePath = AssetDatabase.GetAssetPath(sprite),
+					type = type,
+					mass = mass,
+					speed = speed,
+					fuelCap = fuelCap,
+					fuelCons = fuelCons
+				};
+			}
+		}
 
 		public CDetail()
 		{
@@ -39,40 +51,21 @@ namespace GarageScene
 		public CDetail(DetailData data)
 		{
 			title = data.title;
-			sprite = Resources.Load<Sprite>(data.spritePath);
+			sprite = AssetDatabase.LoadAssetAtPath<Sprite>(data.spritePath);
 			type = data.type;
-			width = data.width;
-			height = data.height;
 			mass = data.mass;
 			speed = data.speed;
 			fuelCap = data.fuelCap;
 			fuelCons = data.fuelCons;
 		}
-
-		public DetailData ToDataType()
-		{
-			return new DetailData
-			{
-				title = title,
-				spritePath = AssetDatabase.GetAssetPath(sprite),
-				type = type,
-				width = width,
-				height = height,
-				mass = mass,
-				speed = speed,
-				fuelCap = fuelCap,
-				fuelCons = fuelCons
-			};
-		}
 	}
 
 	public enum DetailType
 	{
-		SKELETON,
-		BLOCK,
-		ENGINE,
-		WHEEL,
-		FUEL_BANK,
-		ARTIFACT
+		Block,
+		Engine,
+		Wheel,
+		FuelBank,
+		Artifact
 	}
 }

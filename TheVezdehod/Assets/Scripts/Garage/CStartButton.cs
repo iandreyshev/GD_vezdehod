@@ -17,9 +17,9 @@ namespace GarageScene
 		{
 			var car = new CCar();
 
-			foreach (GridItem item in GridModel.GetInstalledItems())
+			foreach (GridItem item in GridModel.GetInstalledBlocks())
 			{
-				car.Insert(item.detail.ToDataType(), (int)item.col, (int)item.row);
+				car.Insert(item.detail, item.x, item.y);
 			}
 
 			CDataManager.Serialize(car);

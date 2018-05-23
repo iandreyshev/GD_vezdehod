@@ -9,6 +9,10 @@ namespace GarageScene
 		private RectTransform m_line;
 		[SerializeField]
 		private RectTransform m_lineBackground;
+		[SerializeField]
+		private Color m_minColor = Color.green;
+		[SerializeField]
+		private Color m_maxColor = Color.red;
 
 		private float m_max;
 		private float m_value = 0;
@@ -30,12 +34,9 @@ namespace GarageScene
 				m_value = value;
 
 				float part = Mathf.Clamp01(Value / Max);
-				Debug.Log(part);
 				float newWidth = m_lineBackground.rect.size.x * part;
-				Debug.Log(newWidth);
 				m_line.sizeDelta = new Vector2(newWidth, m_line.sizeDelta.y);
-
-				m_line.GetComponent<Image>().color = Color.Lerp(Color.green, Color.red, part);
+				m_line.GetComponent<Image>().color = Color.Lerp(m_minColor, m_maxColor, part);
 			}
 		}
 	}

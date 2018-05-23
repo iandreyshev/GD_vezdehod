@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\2D Car\CarController.cs" />
     <Compile Include="Assets\Scripts\Garage\CCarPropertiesView.cs" />
     <Compile Include="Assets\Scripts\Garage\CDetail.cs" />
     <Compile Include="Assets\Scripts\Garage\CDetailPropertiesView.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="Assets\Scripts\Garage\CTile.cs" />
     <Compile Include="Assets\Scripts\Menu\CMenuController.cs" />
     <Compile Include="Assets\Scripts\Menu\CStarsView.cs" />
+    <Compile Include="Assets\Scripts\Road\CBarController.cs" />
+    <Compile Include="Assets\Scripts\Road\CRoadCamera.cs" />
     <Compile Include="Assets\Scripts\Road\CRoadSceneController.cs" />
     <Compile Include="Assets\Scripts\Road\CVezdehod.cs" />
     <Compile Include="Assets\Scripts\Shared\CCar.cs" />
