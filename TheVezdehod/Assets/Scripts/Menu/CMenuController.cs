@@ -9,12 +9,17 @@ namespace MenuScene
 		private CStarsView m_levelStars0;
 		[SerializeField]
 		private CStarsView m_levelStars1;
+		[SerializeField]
+		private CGame m_game;
 
-		public void StartLevel(int levelNumber)
+		public void StartLevel1()
 		{
-			Debug.Log(levelNumber);
-			CDataManager.SetLevel(levelNumber);
-			CSceneSwitcher.Garage();
+			m_game.Garage(Level._1);
+		}
+
+		public void StartLevel2()
+		{
+			m_game.Garage(Level._2);
 		}
 
 		private void Start()

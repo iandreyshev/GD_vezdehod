@@ -1,6 +1,5 @@
 ﻿using GarageScene;
 using Shared;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace RoadScene
@@ -11,6 +10,8 @@ namespace RoadScene
 		private float m_detailOffset = 1;
 		[SerializeField]
 		private GameObject m_detailProto;
+		[SerializeField]
+		private Transform m_container;
 
 		private float m_backOffset;
 		private float m_downOffset;
@@ -25,9 +26,19 @@ namespace RoadScene
 			m_downOffset = m_detailOffset * 5 / 2;
 		}
 
-		private void Awake()
+		public void Build(CCar car)
 		{
-			var car = CDataManager.DeserializeCar();
+			m_wheelsCount = 2;
+
+			foreach (Transform child in m_container)
+			{
+				Destroy(child.gameObject);
+			}
+
+			foreach (WheelJoint2D joint in gameObject.GetComponents<WheelJoint2D>())
+			{
+				Destroy(joint);
+			}
 
 			for (int i = 0; i < car.details.Count; ++i)
 			{
@@ -40,16 +51,16 @@ namespace RoadScene
 		private void InstantiateDetail(int x, int y, CDetail detail)
 		{
 			var position = new Vector3(
-				(m_detailOffset * y - m_backOffset),
-				(m_detailOffset * (5 - x) - m_downOffset));
+				(m_detailOffset * x - m_backOffset),
+				(m_detailOffset * (9 - y) - m_downOffset));
 
-			var detailObject = Instantiate(m_detailProto, position, Quaternion.identity, transform);
+			var detailObject = Instantiate(m_detailProto, position, Quaternion.identity, m_container);
 			var detailSprite = detailObject.GetComponent<SpriteRenderer>();
 
 			detailSprite.sprite = detail.sprite;
 			detailSprite.transform.localScale = new Vector3(
-				1 / detailSprite.size.x,
-				1 / detailSprite.size.y);
+				2 / detailSprite.size.x,
+				2 / detailSprite.size.y);
 
 			detailObject.AddComponent(typeof(PolygonCollider2D));
 
@@ -59,20 +70,23 @@ namespace RoadScene
 				return;
 			}
 
-			var joint = gameObject.AddComponent(typeof(FixedJoint2D)) as FixedJoint2D;
-			joint.connectedBody = detailObject.GetComponent<Rigidbody2D>();
-			joint.anchor = new Vector2(position.x, position.y);
+			Destroy(detailObject.GetComponent<Rigidbody2D>());
+
+			//var joint = gameObject.AddComponent(typeof(FixedJoint2D)) as FixedJoint2D;
+			//joint.connectedBody = detailObject.GetComponent<Rigidbody2D>();
+			//joint.anchor = new Vector2(position.x, position.y);
+			//joint.breakForce = float.MaxValue;
 		}
 
 		private void SetupWheel(GameObject wheelObject, CDetail wheel, Vector3 position)
 		{
 			--m_wheelsCount;
 
-			var joint = gameObject.AddComponent(typeof(WheelJoint2D)) as WheelJoint2D;
-			joint.connectedBody = wheelObject.GetComponent<Rigidbody2D>();
-			joint.anchor = new Vector2(position.x, position.y);
+            var joint = gameObject.AddComponent(typeof(WheelJoint2D)) as WheelJoint2D;
+            joint.connectedBody = wheelObject.GetComponent<Rigidbody2D>();
+            joint.anchor = new Vector2(position.x, position.y);
 
-			if (m_wheelsCount == 1)
+            if (m_wheelsCount == 1)
 			{
 				GetComponent<CarController>().frontwheel = joint;
 			}

@@ -7,7 +7,7 @@ namespace GarageScene
 	public class DetailData
 	{
 		public string title;
-		public string spritePath;
+		public Sprite sprite;
 		public DetailType type;
 		public float mass;
 		public float speed;
@@ -34,7 +34,7 @@ namespace GarageScene
 				return new DetailData
 				{
 					title = title,
-					spritePath = AssetDatabase.GetAssetPath(sprite),
+					sprite = sprite,
 					type = type,
 					mass = mass,
 					speed = speed,
@@ -51,7 +51,7 @@ namespace GarageScene
 		public CDetail(DetailData data)
 		{
 			title = data.title;
-			sprite = AssetDatabase.LoadAssetAtPath<Sprite>(data.spritePath);
+			sprite = data.sprite;
 			type = data.type;
 			mass = data.mass;
 			speed = data.speed;

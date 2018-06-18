@@ -5,13 +5,6 @@ using UnityEngine;
 
 namespace GarageScene
 {
-	public enum SkeletonType
-	{
-		None,
-		Lenovo,
-		Goliath
-	}
-
 	public enum CanBeInsertedInfo
 	{
 		YesNoProblem,
@@ -40,7 +33,6 @@ namespace GarageScene
 		public int Height { get; private set; }
 
 		private List<GridItem> m_details = new List<GridItem>();
-		private SkeletonType m_skeleton = SkeletonType.None;
 		private int m_wheelsCount = 0;
 
 		private IDictionary<DetailType, int> m_counts = new Dictionary<DetailType, int>()
@@ -58,22 +50,6 @@ namespace GarageScene
 			Height = 5;
 		}
 
-		public void SetSkeleton(SkeletonType skeleton, DetailData prototype)
-		{
-			Clear();
-			var points = GetSkeletonPoints(skeleton);
-			foreach (var point in points)
-			{
-				InsertDetail(point.x, point.y, prototype);
-			}
-			m_skeleton = skeleton;
-		}
-
-		public SkeletonType GetSkeletonType()
-		{
-			return m_skeleton;
-		}
-
 		public void InsertDetail(int x, int y, DetailData detail)
 		{
 			m_details.Add(new GridItem(x, y, detail));
@@ -87,6 +63,31 @@ namespace GarageScene
 
 		public List<Vector2Int> GetAvailablePositionsForInsertion(DetailData detail)
 		{
+			if (detail.type == DetailType.Wheel && m_wheelsCount < 2)
+			{
+				return new List<Vector2Int>()
+				{
+					new Vector2Int(1, 3),
+					new Vector2Int(7, 3)
+				};
+			}
+
+			if (detail.type == DetailType.Engine)
+			{
+				return new List<Vector2Int>()
+				{
+					new Vector2Int(6, 0)
+				};
+			}
+
+			if (detail.type == DetailType.FuelBank)
+			{
+				return new List<Vector2Int>()
+				{
+					new Vector2Int(2, 0)
+				};
+			}
+
 			List<Vector2Int> positions = new List<Vector2Int>();
 			for (int i = 0; i < Height; ++i)
 			{
@@ -104,7 +105,7 @@ namespace GarageScene
 		public CanBeInsertedInfo CanBeInserted(int x, int y, DetailData detail)
 		{
 			// Если колес уже два нельзя вставить больше
-			if (detail.type == DetailType.Wheel && m_counts[DetailType.Wheel] >= 2)
+			if (detail.type == DetailType.Wheel && m_counts[DetailType.Wheel] >= 3)
 			{
 				return CanBeInsertedInfo.ToMuchWheels;
 			}
@@ -117,10 +118,10 @@ namespace GarageScene
 
 			foreach (var inserted in m_details)
 			{
-				if (x == inserted.x + 1 && y == inserted.y && x > 0 && x < Width ||
-					x == inserted.x - 1 && y == inserted.y && x > 0 && x < Width ||
-					y == inserted.y - 1 && x == inserted.x && y > 0 && y < Height ||
-					y == inserted.y + 1 && x == inserted.x && y > 0 && y < Height)
+				if (x == inserted.x + 1 && y == inserted.y && x >= 0 && x < Width ||
+					x == inserted.x - 1 && y == inserted.y && x >= 0 && x < Width ||
+					y == inserted.y - 1 && x == inserted.x && y >= 0 && y < Height ||
+					y == inserted.y + 1 && x == inserted.x && y >= 0 && y < Height)
 				{
 					return inserted.detail.type == DetailType.Block ?
 						CanBeInsertedInfo.YesNoProblem : CanBeInsertedInfo.InvalidPosition;
@@ -141,7 +142,6 @@ namespace GarageScene
 		public void Clear()
 		{
 			m_details.Clear();
-			m_skeleton = SkeletonType.None;
 			UpdateDetailsCount();
 		}
 
@@ -163,16 +163,6 @@ namespace GarageScene
 
 		public bool CanBeDeleted(int x, int y)
 		{
-			var points = GetSkeletonPoints(m_skeleton);
-
-			foreach (var point in points)
-			{
-				if (point.x == x && point.y == y)
-				{
-					return false;
-				}
-			}
-
 			foreach (var detail in m_details)
 			{
 				if (detail.x == x && detail.y == y)
@@ -194,52 +184,6 @@ namespace GarageScene
 				}
 			}
 			return null;
-		}
-
-		public List<Vector2Int> GetSkeletonPoints(SkeletonType skeleton)
-		{
-			switch (skeleton)
-			{
-				case SkeletonType.Lenovo:
-					return new List<Vector2Int>()
-				{
-					new Vector2Int(1, 3),
-					new Vector2Int(1, 2),
-					new Vector2Int(1, 1),
-					new Vector2Int(2, 1),
-					new Vector2Int(3, 1),
-					new Vector2Int(4, 1),
-					new Vector2Int(5, 1),
-					new Vector2Int(6, 1),
-					new Vector2Int(7, 2),
-					new Vector2Int(7, 3)
-				};
-				case SkeletonType.Goliath:
-					return new List<Vector2Int>()
-				{
-					new Vector2Int(0, 2),
-					new Vector2Int(1, 2),
-					new Vector2Int(2, 2),
-					new Vector2Int(3, 2),
-					new Vector2Int(4, 2),
-					new Vector2Int(5, 2),
-					new Vector2Int(6, 2),
-					new Vector2Int(7, 2),
-					new Vector2Int(8, 2),
-					new Vector2Int(0, 3),
-					new Vector2Int(1, 3),
-					new Vector2Int(2, 3),
-					new Vector2Int(3, 3),
-					new Vector2Int(4, 3),
-					new Vector2Int(5, 3),
-					new Vector2Int(6, 3),
-					new Vector2Int(7, 3),
-					new Vector2Int(8, 3)
-				};
-				case SkeletonType.None:
-					return new List<Vector2Int>();
-			}
-			throw new Exception("FATAL ERROR");
 		}
 	}
 }

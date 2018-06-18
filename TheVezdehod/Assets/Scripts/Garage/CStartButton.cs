@@ -6,6 +6,9 @@ namespace GarageScene
 {
 	public class CStartButton : MonoBehaviour
 	{
+		[SerializeField]
+		private CGame m_game;
+
 		public CGridModel GridModel { get; set; }
 
 		private void Awake()
@@ -22,8 +25,7 @@ namespace GarageScene
 				car.Insert(item.detail, item.x, item.y);
 			}
 
-			CDataManager.Serialize(car);
-			CSceneSwitcher.Road();
+			m_game.Road(car);
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace GarageScene
@@ -37,7 +36,7 @@ namespace GarageScene
 					OnTileClick(tile);
 				});
 
-				m_tiles[x, y] = tile;
+                m_tiles[x, y] = tile;
 
 				x++;
 
@@ -67,9 +66,9 @@ namespace GarageScene
 		public void DrawAt(CDetail detail, int x, int y)
 		{
 			var tile = m_tiles[x, y].transform;
-
 			var detailImage = Instantiate(m_imageProto, tile.position, Quaternion.identity, m_detailParent);
-			detailImage.GetComponent<RectTransform>().sizeDelta = m_detailSize;
+
+            detailImage.GetComponent<RectTransform>().sizeDelta = m_detailSize;
 			detailImage.sprite = detail.sprite;
 		}
 

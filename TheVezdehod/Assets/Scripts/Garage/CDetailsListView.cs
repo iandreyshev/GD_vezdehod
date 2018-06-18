@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,10 +27,11 @@ namespace GarageScene
 		private CGridModel m_gridModel = new CGridModel();
 		private CDetail m_selectedDetail;
 		private List<CDetailView> m_detailsViews = new List<CDetailView>();
+        private bool m_isDraw = false;
 
-		private void Start()
+		private IEnumerator Start()
 		{
-			m_onClickListener = new OnDetailClickListener(this);
+            m_onClickListener = new OnDetailClickListener(this);
 
 			var transform = GetComponent<RectTransform>();
 			var offset = 0f;
@@ -51,16 +53,21 @@ namespace GarageScene
 			m_gridView.InitSize(m_gridModel.Width, m_gridModel.Height);
 			m_gridView.onTileClick = new OnTileClickListener(this);
 
-			m_gridModel.SetSkeleton(SkeletonType.Goliath, m_sceletonProto.Data);
-			m_gridModel.GetInstalledBlocks().ForEach(e =>
-			{
-				m_gridView.DrawAt(m_sceletonProto, e.x, e.y);
-			});
-
 			m_startButton.GridModel = m_gridModel;
-		}
 
-		private class OnDetailClickListener : IOnDetailClickListener
+            yield return StartCoroutine("WaitAndPrint");
+            m_gridModel.GetInstalledBlocks().ForEach(e =>
+            {
+                m_gridView.DrawAt(m_sceletonProto, e.x, e.y);
+            });
+        }
+
+        IEnumerator WaitAndPrint()
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        private class OnDetailClickListener : IOnDetailClickListener
 		{
 			CDetailsListView m_view;
 
@@ -101,7 +108,8 @@ namespace GarageScene
 				m_view.m_detailProperties.Close();
 
 				m_view.m_gridModel.InsertDetail(x, y, m_view.m_selectedDetail.Data);
-				m_view.m_carPropertiesView.Set(m_view.m_gridModel.GetInstalledBlocks().ConvertAll(e => new CDetail(e.detail)));
+				m_view.m_carPropertiesView.Set(
+					m_view.m_gridModel.GetInstalledBlocks().ConvertAll(e => new CDetail(e.detail)));
 
 				m_view.m_detailsViews.ForEach((e) =>
 				{

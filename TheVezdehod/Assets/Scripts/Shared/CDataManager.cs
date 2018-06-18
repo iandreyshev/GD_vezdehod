@@ -32,26 +32,5 @@ namespace Shared
 		{
 			return PlayerPrefs.GetInt(LEVEL, DEFAULT_LEVEL);
 		}
-
-		public static void Serialize(CCar car)
-		{
-			BinaryFormatter bFormatter = new BinaryFormatter();
-			FileStream stream = new FileStream(PATH, FileMode.Create);
-
-			bFormatter.Serialize(stream, car);
-			stream.Close();
-		}
-
-		public static CCar DeserializeCar()
-		{
-			CCar car = null;
-			BinaryFormatter bFormatter = new BinaryFormatter();
-			FileStream stream = new FileStream(PATH, FileMode.Open);
-
-			car = bFormatter.Deserialize(stream) as CCar;
-			stream.Close();
-
-			return car;
-		}
 	}
 }

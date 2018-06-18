@@ -60,6 +60,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\2D Car\CarController.cs" />
+    <Compile Include="Assets\CCoin.cs" />
+    <Compile Include="Assets\CFinishCollider.cs" />
+    <Compile Include="Assets\CMoneyView.cs" />
+    <Compile Include="Assets\CTargetCamera.cs" />
+    <Compile Include="Assets\CViewScript.cs" />
     <Compile Include="Assets\Scripts\Garage\CCarPropertiesView.cs" />
     <Compile Include="Assets\Scripts\Garage\CDetail.cs" />
     <Compile Include="Assets\Scripts\Garage\CDetailPropertiesView.cs" />
@@ -79,6 +84,7 @@
     <Compile Include="Assets\Scripts\Road\CVezdehod.cs" />
     <Compile Include="Assets\Scripts\Shared\CCar.cs" />
     <Compile Include="Assets\Scripts\Shared\CDataManager.cs" />
+    <Compile Include="Assets\Scripts\Shared\CGame.cs" />
     <Compile Include="Assets\Scripts\Shared\CSceneSwitcher.cs" />
     <None Include="Assets\Resources\Cars\car.txt" />
     <Reference Include="UnityEditor.StandardEvents">

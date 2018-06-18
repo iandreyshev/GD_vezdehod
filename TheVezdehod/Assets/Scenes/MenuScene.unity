@@ -1002,6 +1002,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_levelStars0: {fileID: 769695703}
   m_levelStars1: {fileID: 328430057}
+  m_game: {fileID: 0}
 --- !u!1 &1866418468
 GameObject:
   m_ObjectHideFlags: 0
